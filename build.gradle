@@ -1,0 +1,41 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.7.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'java'
+}
+
+group = 'com.acgnu'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compile 'commons-io:commons-io:2.6'
+    //阿里巴巴Fastjson
+    compile 'com.alibaba:fastjson:1.2.56'
+    //durid数据库连接池
+    compile 'com.alibaba:druid-spring-boot-starter:1.1.20'
+    //JSP支持
+    compile 'javax.servlet:jstl'
+    compile 'javax.servlet:javax.servlet-api'
+    compile 'org.apache.tomcat.embed:tomcat-embed-jasper'
+    //mybatis + mysql
+    compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.0'
+    compile 'mysql:mysql-connector-java:8.0.17'
+    //springboot AMQP
+    compile 'org.springframework.boot:spring-boot-starter-amqp'
+    //compile group: 'javax.servlet', name:'spring-boot-devtools', version:'2.0.4.RELEASE'	//热部署
+    //redis
+    compile 'org.springframework.boot:spring-boot-starter-data-redis'
+//	compile 'org.springframework.boot:spring-boot-starter-cache'
+    //shiro
+    compile 'org.apache.shiro:shiro-core:1.2.2'
+    compile 'org.apache.shiro:shiro-spring:1.2.2'
+    //MongoDB
+    compile 'org.mongodb:mongodb-driver-sync:3.10.1'
+}

@@ -4,4 +4,7 @@
     <select id="queryOne" resultType="com.acgnu.origin.model.CardMsg" parameterType="java.lang.Integer">
         select * from card_msg where id = #{id}
     </select>
+    <select id="findOneUser" resultType="com.acgnu.origin.model.User" parameterType="java.lang.Integer">
+        select * from user where id = #{id}
+    </select>
 </mapper>

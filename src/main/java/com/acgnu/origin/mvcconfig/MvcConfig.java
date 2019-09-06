@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Configuration
+//@Configuration
 public class MvcConfig {
 //    @Bean
 //    public MappingJackson2HttpMessageConverter getMappingJackson2HttpMessageConverter() {

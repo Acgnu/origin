@@ -20,6 +20,6 @@ public interface SimpleMapper {
 
     List<SimpleModel> queryOne(@Param("id") Integer id);
 
-    @Select("select * from t_users where id = #{id}")
+    @Select("select * from accesser where id = #{id}")
     User findOneUser(@Param("id") Integer id);
 }

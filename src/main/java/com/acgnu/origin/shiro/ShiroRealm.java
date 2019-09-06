@@ -3,7 +3,7 @@ package com.acgnu.origin.shiro;
 import com.acgnu.origin.model.User;
 import com.acgnu.origin.model.Permission;
 import com.acgnu.origin.model.Role;
-import com.acgnu.origin.service.SimpleDbService;
+import com.acgnu.origin.service.SimpleService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ShiroRealm extends AuthorizingRealm{
     //数据查询
     @Autowired
-    private SimpleDbService baseDbService;
+    private SimpleService baseDbService;
 
     /**
      * 获取角色和权限

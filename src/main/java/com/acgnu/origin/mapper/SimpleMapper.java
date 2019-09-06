@@ -1,6 +1,6 @@
 package com.acgnu.origin.mapper;
 
-import com.acgnu.origin.model.CardMsg;
+import com.acgnu.origin.model.SimpleModel;
 import com.acgnu.origin.model.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -11,14 +11,14 @@ import java.util.List;
 
 @Repository
 @Mapper
-public interface CardMsgMapper {
+public interface SimpleMapper {
     @Select("select * from card_msg limit 2")
-    List<CardMsg> findAll();
+    List<SimpleModel> findAll();
 
     @Select("select * from card_msg where id = #{id}")
-    CardMsg findOne(@Param("id") Integer id);
+    SimpleModel findOne(@Param("id") Integer id);
 
-    List<CardMsg> queryOne(@Param("id") Integer id);
+    List<SimpleModel> queryOne(@Param("id") Integer id);
 
     @Select("select * from t_users where id = #{id}")
     User findOneUser(@Param("id") Integer id);

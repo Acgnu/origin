@@ -3,6 +3,8 @@ package com.acgnu.origin;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+
 //@SpringBootApplication
 //public class DemoApplication extends SpringBootServletInitializer {
 //	@Override
@@ -14,8 +16,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //		SpringApplication.run(DemoApplication.class, args);
 //	}
 //}
-@MapperScan("com.origin.mapper")
-//@ComponentScan("com.origin")
+@MapperScan("com.acgnu.origin.mapper")
+//@ComponentScan("com.acgnu.origin")
 @SpringBootApplication
 public class OriginApplication {
 

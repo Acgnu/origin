@@ -1,8 +1,8 @@
 package com.acgnu.origin.service;
 
-import com.acgnu.origin.mapper.CardMsgMapper;
+import com.acgnu.origin.mapper.SimpleMapper;
 import com.acgnu.origin.model.User;
-import com.acgnu.origin.model.CardMsg;
+import com.acgnu.origin.model.SimpleModel;
 import com.acgnu.origin.model.Permission;
 import com.acgnu.origin.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,27 +15,27 @@ import java.util.List;
 
 @Service
 @Transactional
-public class SimpleDbService{
+public class SimpleService {
     @Autowired
-    private CardMsgMapper cardMsgMapper;
+    private SimpleMapper simpleMapper;
 
-    public List<CardMsg> findAll(){
+    public List<SimpleModel> findAll(){
         System.out.println(System.currentTimeMillis() + " : findAll");
-        return cardMsgMapper.findAll();
+        return simpleMapper.findAll();
     }
 
     @Cacheable("db0")
-    public CardMsg findOne(Integer id){
+    public SimpleModel findOne(Integer id){
         System.out.println(System.currentTimeMillis() + " : findOne");
-        return cardMsgMapper.findOne(id);
+        return simpleMapper.findOne(id);
     }
 
     public User findOneUser(Integer uid){
-        return cardMsgMapper.findOneUser(uid);
+        return simpleMapper.findOneUser(uid);
     }
 
-    public List<CardMsg> queryOne(Integer id){
-        return cardMsgMapper.queryOne(id);
+    public List<SimpleModel> queryOne(Integer id){
+        return simpleMapper.queryOne(id);
     }
 
     /**

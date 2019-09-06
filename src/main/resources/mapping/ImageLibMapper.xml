@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.acgnu.origin.mapper.ImageLibMapper">
+    <resultMap id="imageInfoResult" type="com.acgnu.origin.model.Image">
+        <id property="id" column="id" jdbcType="BIGINT" />
+        <result property="describe" column="describe" jdbcType="VARCHAR"/>
+        <result property="brandId" column="brand_id" jdbcType="INTEGER"/>
+        <result property="netUrl" column="net_url" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" />
+        <result property="valid" column="valid" jdbcType="TINYINT"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+    <select id="findAllImgBrand" resultType="com.acgnu.origin.model.ImgBrand">
+        select * from img_brand
+    </select>
+
+    <select id="getImageInfo" resultMap="imageInfoResult" parameterType="java.lang.Long">
+        select * from image where  id = #{id}
+    </select>
+</mapper>

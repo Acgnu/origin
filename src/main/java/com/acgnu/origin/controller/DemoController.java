@@ -2,10 +2,10 @@ package com.acgnu.origin.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.acgnu.origin.model.User;
-import com.acgnu.origin.model.CardMsg;
+import com.acgnu.origin.model.SimpleModel;
 import com.acgnu.origin.rabbitmq.RabbitmqConfig;
 import com.acgnu.origin.redis.RedisHelper;
-import com.acgnu.origin.service.SimpleDbService;
+import com.acgnu.origin.service.SimpleService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -29,7 +29,7 @@ public class DemoController {
     private User admin;
 
     @Autowired
-    private SimpleDbService simpleDbService;
+    private SimpleService simpleService;
 
     @Autowired
     private RabbitMessagingTemplate rabbitMessagingTemplate;
@@ -46,7 +46,7 @@ public class DemoController {
         JSONObject fastjson = new JSONObject();
         fastjson.put("code", 0);
         fastjson.put("msg", "success");
-        User user = simpleDbService.findOneUser(1);
+        User user = simpleService.findOneUser(1);
         fastjson.put("operator", user);
         return fastjson;
     }
@@ -57,14 +57,14 @@ public class DemoController {
      * @return
      */
     @RequestMapping(value = {"/cardmsg/{id}", "/cardmsg"}, method = RequestMethod.GET)
-    public List<CardMsg> cardMsg(@PathVariable(value = "id", required = false) Integer id){
-        List<CardMsg> cardMsgs = null;
+    public List<SimpleModel> cardMsg(@PathVariable(value = "id", required = false) Integer id){
+        List<SimpleModel> simpleModels = null;
         if (null == id) {
-            cardMsgs = simpleDbService.findAll();
+            simpleModels = simpleService.findAll();
         } else {
-            cardMsgs = simpleDbService.queryOne(id);
+            simpleModels = simpleService.queryOne(id);
         }
-        return cardMsgs;
+        return simpleModels;
     }
 
     /**

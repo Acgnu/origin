@@ -2,7 +2,7 @@ package com.acgnu.origin.model;
 
 import java.io.Serializable;
 
-public class CardMsg implements Serializable{
+public class SimpleModel implements Serializable{
     private static final long serialVersionUID = 1L;
 
     private Integer id;

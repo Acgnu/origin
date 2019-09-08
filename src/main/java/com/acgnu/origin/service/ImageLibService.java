@@ -15,7 +15,11 @@ public class ImageLibService {
     private ImageLibMapper imageLibMapper;
 
     public List<ImgBrand> findAllImgBrand(){
-        return imageLibMapper.findAllImgBrand();
+        return null;
+    }
+
+    public List<Image> findAllImageBeta(){
+        return imageLibMapper.selectList(null);
     }
 
     public Image getImageInfo(long id) {

@@ -4,11 +4,10 @@ import com.acgnu.origin.model.Image;
 import com.acgnu.origin.model.ImgBrand;
 import com.acgnu.origin.service.ImageLibService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -16,13 +15,17 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/img")
-public class ImageLibController {
+public class ImageLibController extends BaseController{
     @Autowired
     private ImageLibService imageLibService;
 
     @GetMapping("/lib/brand/all")
     public List<ImgBrand> getAllBrands(){
         return imageLibService.findAllImgBrand();
+    }
+    @PostMapping("/lib/all")
+    public List<Image> getAllImageBeta(){
+        return imageLibService.findAllImageBeta();
     }
 
     @GetMapping("/info/{id}")
@@ -31,5 +34,10 @@ public class ImageLibController {
             return null;
         }
         return imageLibService.getImageInfo(id);
+    }
+
+    @PostMapping("/info/add")
+    public Image getImageInfo(HttpServletRequest request, HttpServletResponse response, Image image){
+        return image;
     }
 }

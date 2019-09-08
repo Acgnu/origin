@@ -3,6 +3,7 @@ package com.acgnu.origin.notes;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 
 /**
@@ -24,7 +25,7 @@ public class FileUtils {
              in = openInputStream(toRead);  
              return IOUtils.toString(in, CHARSET_UTF_8);  
          } finally {  
-             IOUtils.closeQuietly(in);  
+             IOUtils.closeQuietly(in);
          }  
 	}
 	

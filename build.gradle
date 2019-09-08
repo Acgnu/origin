@@ -4,6 +4,9 @@ plugins {
     id 'java'
 }
 
+configurations {
+    all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+}
 group = 'com.acgnu'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
@@ -18,30 +21,32 @@ dependencies {
     //lombok
     annotationProcessor 'org.projectlombok:lombok:1.18.2'
     compileOnly 'org.projectlombok:lombok:1.18.2'
-    testAnnotationProcessor  'org.projectlombok:lombok:1.18.2'
-    testCompileOnly 'org.projectlombok:lombok:1.18.2'
-    compile 'commons-io:commons-io:2.6'
+//    testAnnotationProcessor  'org.projectlombok:lombok:1.18.2'
+//    testCompileOnly 'org.projectlombok:lombok:1.18.2'
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'commons-io:commons-io:2.6'
     //阿里巴巴Fastjson
-    compile 'com.alibaba:fastjson:1.2.56'
+    implementation 'com.alibaba:fastjson:1.2.56'
     //durid数据库连接池
-    compile 'com.alibaba:druid-spring-boot-starter:1.1.20'
+    implementation 'com.alibaba:druid-spring-boot-starter:1.1.20'
     //JSP支持
-    compile 'javax.servlet:jstl'
-    compile 'javax.servlet:javax.servlet-api'
-    compile 'org.apache.tomcat.embed:tomcat-embed-jasper'
+    implementation 'javax.servlet:jstl'
+    implementation 'javax.servlet:javax.servlet-api'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
     //mybatis + mysql
-//    compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.0'
-    compile 'com.baomidou:mybatis-plus-boot-starter:3.1.0'
-    compile 'mysql:mysql-connector-java:8.0.17'
+//    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.0'
+    implementation 'com.baomidou:mybatis-plus-boot-starter:3.1.0'
+    implementation 'mysql:mysql-connector-java:8.0.17'
     //springboot AMQP
-    compile 'org.springframework.boot:spring-boot-starter-amqp'
-    //compile group: 'javax.servlet', name:'spring-boot-devtools', version:'2.0.4.RELEASE'	//热部署
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    //implementation group: 'javax.servlet', name:'spring-boot-devtools', version:'2.0.4.RELEASE'	//热部署
     //redis
-    compile 'org.springframework.boot:spring-boot-starter-data-redis'
-//	compile 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+//	implementation 'org.springframework.boot:spring-boot-starter-cache'
     //shiro
-    compile 'org.apache.shiro:shiro-core:1.2.2'
-    compile 'org.apache.shiro:shiro-spring:1.2.2'
+    implementation 'org.apache.shiro:shiro-core:1.2.2'
+    implementation 'org.apache.shiro:shiro-spring:1.2.2'
     //MongoDB
-    compile 'org.mongodb:mongodb-driver-sync:3.10.1'
+    implementation 'org.mongodb:mongodb-driver-sync:3.10.1'
 }

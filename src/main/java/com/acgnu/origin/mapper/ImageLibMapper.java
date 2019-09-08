@@ -9,7 +9,4 @@ import java.util.List;
 
 @Repository
 public interface ImageLibMapper  extends BaseMapper<Image> {
-    List<ImgBrand> findAllImgBrand();
-
-    Image getImageInfo(long id);
 }

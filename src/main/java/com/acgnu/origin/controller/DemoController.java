@@ -1,11 +1,11 @@
 package com.acgnu.origin.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.acgnu.origin.model.User;
 import com.acgnu.origin.model.SimpleModel;
+import com.acgnu.origin.model.User;
 import com.acgnu.origin.rabbitmq.RabbitmqConfig;
 import com.acgnu.origin.redis.RedisHelper;
 import com.acgnu.origin.service.SimpleService;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-public class DemoController {
+public class DemoController extends BaseController {
     @Value("${origin.config.creator}")
     private String creator;
 
@@ -36,18 +36,24 @@ public class DemoController {
 
     @Autowired
     private RedisHelper redisHelper;
-
     /**
      * 最基本的返回json数据
      * @return
      */
-    @GetMapping("demo")    //使用GetMapping可以省略method
-    public JSONObject demoData(){
+    @GetMapping("/demox")    //使用GetMapping可以省略method
+    public JSONObject demoData() {
         JSONObject fastjson = new JSONObject();
         fastjson.put("code", 0);
         fastjson.put("msg", "success");
         User user = simpleService.findOneUser(1);
         fastjson.put("operator", user);
+//        for (int i = 0; i < 100000; i++) {
+//            try {
+//                int x = 1 / 0;
+//            } catch (Exception e) {
+//                logger.error(e.getMessage(), e);
+//            }
+//        }
         return fastjson;
     }
 

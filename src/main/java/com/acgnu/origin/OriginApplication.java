@@ -4,6 +4,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 //@SpringBootApplication
 //public class DemoApplication extends SpringBootServletInitializer {
@@ -19,6 +20,7 @@ import org.springframework.context.annotation.ComponentScan;
 @MapperScan("com.acgnu.origin.mapper")
 //@ComponentScan("com.acgnu.origin")
 @SpringBootApplication
+@EnableScheduling
 public class OriginApplication {
 
     public static void main(String[] args) {

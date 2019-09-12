@@ -26,7 +26,7 @@ public class ControllerLogAspect {
         HttpServletRequest request=attributes.getRequest();
 
         // 获取url
-        logger.info("\n ip: {}\n uri: {}\n header: {}\n invoke: {} -> {}\n params: {}\n args: {}",
+        logger.debug("\n ip: {}\n uri: {}\n header: {}\n invoke: {} -> {}\n params: {}\n args: {}",
                 request.getRemoteAddr(),
                 request.getRequestURI(),
                 request.getHeader("_customer"),
@@ -38,7 +38,7 @@ public class ControllerLogAspect {
 
     @AfterReturning(returning = "object", pointcut = "debugLog()")
     public void doAfterReturning(Object object){
-        logger.info("\n response: {}", JSON.toJSONString(object));
+        logger.debug("\n response: {}", JSON.toJSONString(object));
     }
 
     //后置异常通知

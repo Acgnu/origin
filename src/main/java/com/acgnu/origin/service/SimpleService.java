@@ -1,10 +1,7 @@
 package com.acgnu.origin.service;
 
 import com.acgnu.origin.mapper.SimpleMapper;
-import com.acgnu.origin.model.User;
-import com.acgnu.origin.model.SimpleModel;
-import com.acgnu.origin.model.Permission;
-import com.acgnu.origin.model.Role;
+import com.acgnu.origin.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -106,4 +103,12 @@ public class SimpleService {
         return null;
     }
 
+//    public AccessLog findAccessLogByHash(String accessHash) {
+//    }
+//
+//    public void updateAccessLogById(AccessLog accessLog) {
+//    }
+//
+//    public void saveAccessLog(AccessLog accessLog) {
+//    }
 }

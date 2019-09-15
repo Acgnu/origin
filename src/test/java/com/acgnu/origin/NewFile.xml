@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pets SYSTEM "D:\Workspaces\Java\origin\src\test\java\com\acgnu\origin\MyPets.dtd">
+<!--
+ 内部
+<!DOCTYPE pets [
+<!ELEMENT pets (dogs, cats)>
+<!ELEMENT dogs (dog*)>
+<!ELEMENT cats (cat+)>
+<!ELEMENT dog (name, health, love, strain?)>
+<!ATTLIST dog id CDATA #REQUIRED>
+<!ELEMENT cat (name, health, love, sex)>
+<!ATTLIST cat id CDATA #REQUIRED>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT health (#PCDATA)>
+<!ELEMENT love (#PCDATA)>
+<!ELEMENT sex (#PCDATA)>
+<!ELEMENT love (#PCDATA)>
+]>
+ -->
+<pets>
+	<dogs>
+		<dog id = "1">
+			<name>傻逼</name>
+			<health>100</health>
+			<love>90</love>
+			<strain>傻乎乎的品种</strain>
+		</dog>
+		<dog id = "2">
+			<name>傻X</name>
+			<health>80</health>
+			<love>80</love>
+			<strain>傻XX的品种</strain>
+		</dog>
+	</dogs>
+	<cats>
+		<cat id = "1">
+			<name>傻猫</name>
+			<health>70</health>
+			<love>80</love>
+			<sex>公</sex>
+		</cat>
+	</cats>
+</pets>

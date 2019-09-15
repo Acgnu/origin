@@ -1,8 +1,8 @@
 package com.acgnu.origin.shiro;
 
-import com.acgnu.origin.model.User;
-import com.acgnu.origin.model.Permission;
-import com.acgnu.origin.model.Role;
+import com.acgnu.origin.entity.Accesser;
+import com.acgnu.origin.entity.Privilege;
+import com.acgnu.origin.entity.Role;
 import com.acgnu.origin.service.SimpleService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ShiroRealm extends AuthorizingRealm{
     //数据查询
     @Autowired
-    private SimpleService baseDbService;
+    private SimpleService simpleService;
 
     /**
      * 获取角色和权限
@@ -29,14 +29,14 @@ public class ShiroRealm extends AuthorizingRealm{
         //获取登录的用户名
         String name = (String) principals.getPrimaryPrincipal();
         //查询
-        User admin = baseDbService.findVirtulUser(name);
+        Accesser admin = simpleService.findUserByUname(name);
 
         //添加角色和权限
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         for (Role role : admin.getRoles()) {
-            simpleAuthorizationInfo.addRole(role.getName());
-            for (Permission permission : role.getPermissions()) {
-                simpleAuthorizationInfo.addStringPermission(permission.getPremission());
+            simpleAuthorizationInfo.addRole(role.getRoleName());
+            for (Privilege privilege : role.getPrivileges()) {
+                simpleAuthorizationInfo.addStringPermission(privilege.getUri());
             }
         }
         return simpleAuthorizationInfo;
@@ -57,7 +57,7 @@ public class ShiroRealm extends AuthorizingRealm{
 
         //获取用户
         String name = token.getPrincipal().toString();
-        User admin = baseDbService.findVirtulUser(name);
+        Accesser admin = simpleService.findUserByUname(name);
         if (null == admin) {
             return null;
         }else{

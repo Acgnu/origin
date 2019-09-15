@@ -25,20 +25,25 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.2'
 //    testAnnotationProcessor  'org.projectlombok:lombok:1.18.2'
 //    testCompileOnly 'org.projectlombok:lombok:1.18.2'
+    //使用Log4j作为默认日志
     implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+    //启用AOP
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'commons-io:commons-io:2.6'
     //阿里巴巴Fastjson
     implementation 'com.alibaba:fastjson:1.2.56'
     //durid数据库连接池
-    implementation 'com.alibaba:druid-spring-boot-starter:1.1.20'
+//    implementation 'com.alibaba:druid-spring-boot-starter:1.1.20'
     //JSP支持
     implementation 'javax.servlet:jstl'
     implementation 'javax.servlet:javax.servlet-api'
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
-    //mybatis + mysql
+    //mybatis
 //    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.0'
-    implementation 'com.baomidou:mybatis-plus-boot-starter:3.1.0'
+//    impleme|ntation 'com.baomidou:mybatis-plus-boot-starter:3.1.0'
+    //spring data jpa
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    //mysql
     implementation 'mysql:mysql-connector-java:8.0.17'
     //springboot AMQP
     implementation 'org.springframework.boot:spring-boot-starter-amqp'

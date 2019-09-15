@@ -16,6 +16,5 @@ public class ShiroRedisCacheManager extends AbstractCacheManager {
     @Override
     protected Cache createCache(String name) throws CacheException {
         return new ShiroRedisCache(redisHelper);
-
     }
 }

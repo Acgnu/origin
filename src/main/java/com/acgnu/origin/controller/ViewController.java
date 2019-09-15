@@ -10,9 +10,4 @@ public class ViewController {
     @Value("${origin.config.creator}")
     private String creator;
 
-    @RequestMapping(value = "/")
-    public String demoView(Model model){
-        model.addAttribute("creator", creator);
-        return "demoview";
-    }
 }

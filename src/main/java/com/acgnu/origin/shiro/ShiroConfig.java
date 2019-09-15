@@ -42,9 +42,9 @@ public class ShiroConfig {
         //authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访
         map.put("/shiro/login/**","anon");
         map.put("/shiro/**","authc");
-        shiroFilterFactoryBean.setLoginUrl("/demoview");
-        shiroFilterFactoryBean.setSuccessUrl("/demoview");
-        shiroFilterFactoryBean.setUnauthorizedUrl("/error");
+        shiroFilterFactoryBean.setLoginUrl("/login");
+        shiroFilterFactoryBean.setSuccessUrl("/success");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/deny");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
         return shiroFilterFactoryBean;
     }
@@ -58,7 +58,7 @@ public class ShiroConfig {
     public SimpleMappingExceptionResolver createSimpleMappingExceptionResolver(){
         SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
         Properties mappings = new Properties();
-        mappings.setProperty("UnauthorizedException", "/error");
+        mappings.setProperty("UnauthorizedException", "/deny");
 //        mappings.setProperty("DatabaseException", "/error");
         simpleMappingExceptionResolver.setExceptionMappings(mappings);
 //        simpleMappingExceptionResolver.setDefaultErrorView("/error");

@@ -1,9 +1,7 @@
 package com.acgnu.origin;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 //@SpringBootApplication
@@ -17,12 +15,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 //		SpringApplication.run(DemoApplication.class, args);
 //	}
 //}
-@MapperScan("com.acgnu.origin.mapper")
+//@MapperScan("com.acgnu.origin.mapper")
 //@ComponentScan("com.acgnu.origin")
 @SpringBootApplication
 @EnableScheduling
 public class OriginApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(OriginApplication.class, args);
     }

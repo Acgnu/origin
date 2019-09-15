@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -570,5 +571,23 @@ public class RedisHelper {
 
     public Set<Object> sSetKeys(String k){
         return redisTemplate.keys(k);
+    }
+
+    /**
+     * 根据键一次获取多个
+     * @param keys
+     * @return
+     */
+    public <T> List<T> mGet(Collection<String> keys) {
+        return redisTemplate.opsForValue().multiGet(keys);
+    }
+
+    /**
+     * 返回Redis中匹配的键
+     * @param partten
+     * @return
+     */
+    public Set<String> keys(String partten){
+        return redisTemplate.keys(partten);
     }
 }

@@ -9,6 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * 配置jackson序列器, 处理全局返回的 LocalDateTime 格式
+ */
 @Configuration
 public class LocalDateTimeSerializerConfig {
     @Value("${spring.jackson.date-format:yyyy-MM-dd HH:mm:ss}")

@@ -19,6 +19,7 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
+    apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
     group = 'com.acgnu'
@@ -27,6 +28,8 @@ subprojects {
     sourceCompatibility = '11'
     targetCompatibility = '11'
 
+    jar.enabled = true
+    bootJar.enabled = false
     //关闭springboot的默认打包 (打包单个jar需要 )
 //    jar.enabled = true
 //    bootJar.enabled = false

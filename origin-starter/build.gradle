@@ -1,9 +1,5 @@
 archivesBaseName = 'origin-starter'
 
-apply plugin: 'org.springframework.boot'
-
-jar.enabled = true
-bootJar.enabled = false
 //使用bootJar运行时候, 开启以下配置将项目打包成一个jar
 //jar.enabled = false
 //bootJar.enabled = true

@@ -1,5 +1,6 @@
 package com.acgnu.origin.notes;
 
+import java.util.Optional;
 import java.util.TreeMap;
 
 /**
@@ -64,9 +65,7 @@ public class TenCloudAnalytic {
      * @return 接口返回
      */
     private String createTenAccess(String action, String apiAddr, TreeMap<String, String> urlArgs){
-        if (null == urlArgs) {
-            urlArgs = new TreeMap<>();
-        }
+        urlArgs = Optional.ofNullable(urlArgs).orElseGet(TreeMap::new);
         String nonce = RandomUtil.randStringLength(6);
         urlArgs.put("Action", action);
         urlArgs.put("Timestamp", System.currentTimeMillis() / 1000 + "");

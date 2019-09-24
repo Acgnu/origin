@@ -17,14 +17,12 @@ public class SimpleService {
     private AccesserRepository accesserRepository;
 
     public List<Accesser> findAll(){
-        System.out.println(System.currentTimeMillis() + " : findAll");
 //        return simpleMapper.findAll();
         return null;
     }
 
     @Cacheable("db0")
     public Accesser findOne(int id){
-        System.out.println(System.currentTimeMillis() + " : findOne");
         Optional<Accesser> optional = accesserRepository.findById(id);
         return optional.orElseGet(Accesser::new);
     }

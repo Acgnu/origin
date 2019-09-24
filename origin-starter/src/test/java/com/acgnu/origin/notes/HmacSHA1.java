@@ -25,10 +25,6 @@ public class HmacSHA1 {
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             System.err.println(e.getMessage());
         }
-        if (null != result) {
-            return new String(result);
-        } else {
-            return null;
-        }
+        return null == result ? null : new String(result);
     }
 }

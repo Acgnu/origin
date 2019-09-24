@@ -35,11 +35,8 @@ public class CommonUnitTest {
     }
 
     public void testSocket(){
-        Socket socket = null;
-        try {
-            //创建一个流套接字并将其连接到指定主机上的指定端口号
-            socket = new Socket("192.168.1.101", 50003);
-
+        //创建一个流套接字并将其连接到指定主机上的指定端口号
+        try(Socket socket = new Socket("192.168.1.101", 50003)) {
             //读取服务器端数据
             DataInputStream input = new DataInputStream(socket.getInputStream());
             //向服务器端发送数据
@@ -59,32 +56,19 @@ public class CommonUnitTest {
             input.close();
         } catch (Exception e) {
             System.out.println("客户端异常:" + e.getMessage());
-        } finally {
-            if (socket != null) {
-                try {
-                    socket.close();
-                } catch (IOException e) {
-                    System.out.println("客户端 finally 异常:" + e.getMessage());
-                }
-            }
         }
     }
     public void testRunCmd(){
         try {
             String line;
             StringBuilder sb = new StringBuilder();
-            try {
-                Process process = Runtime.getRuntime().exec("cmd.exe");
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                while ((line = bufferedReader.readLine()) != null) {
-                    sb.append(line);
-                }
-                System.out.println(sb.toString());
-                process.waitFor();
-            } catch (IOException e) {
-                // TODO 自动生成的 catch 块
-                e.printStackTrace();
+            Process process = Runtime.getRuntime().exec("cmd.exe");
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line);
             }
+            System.out.println(sb.toString());
+            process.waitFor();
         }catch (Exception e){
             e.printStackTrace();
         }

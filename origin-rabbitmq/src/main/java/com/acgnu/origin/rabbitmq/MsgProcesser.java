@@ -12,7 +12,7 @@ public class MsgProcesser {
 //    @RabbitListener(queues = RabbitmqConfig.QUEEN_NAME)
     public void processMessage(String content) {
 //        try {
-            System.out.println("mq msg received at 01:" + content);
+//            System.out.println("mq msg received at 01:" + content);
 //        } catch (Exception e) {
             //出现异常抛出此异常，拒收此消息。
 //            throw new AmqpRejectAndDontRequeueException(e.getMessage());

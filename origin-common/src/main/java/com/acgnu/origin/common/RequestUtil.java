@@ -1,5 +1,6 @@
 package com.acgnu.origin.common;
 
+import com.acgnu.origin.pojo.IpAnalyseResult;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import cz.mallat.uasparser.OnlineUpdater;
@@ -8,18 +9,15 @@ import cz.mallat.uasparser.UserAgentInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
-import com.acgnu.origin.pojo.IpAnalyseResult;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 public class RequestUtil {
-    private static RestTemplate restTemplate;
     private static UASparser uasParser;
     static {
-        restTemplate = new RestTemplate();
-        restTemplate = new RestTemplate();
         try {
             uasParser = new UASparser(OnlineUpdater.getVendoredInputStream());
 //            uasParser = new UASparser();
@@ -48,10 +46,10 @@ public class RequestUtil {
      * @param ip
      * @return
      */
-    public static IpAnalyseResult getIpAreaInfo(String ip) {
+    public static IpAnalyseResult getIpAreaInfo(String ip, RestTemplate restTemplate) {
         JSONObject result = restTemplate.getForObject("http://api.online-service.vip/ip3?ip=" + ip, JSONObject.class);
         IpAnalyseResult analyseResult = JSON.toJavaObject(result.getJSONObject("data"), IpAnalyseResult.class);
-        return analyseResult == null ? new IpAnalyseResult() : analyseResult;
+        return Optional.ofNullable(analyseResult).orElseGet(IpAnalyseResult::new);
     }
 
     /***

@@ -8,6 +8,7 @@ import com.acgnu.origin.redis.RedisHelper;
 import com.acgnu.origin.redis.RedisKeyConst;
 import com.acgnu.origin.repository.AccessUvLogRepository;
 import com.acgnu.origin.service.SimpleService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 @RestController
 @CrossOrigin
 public class BetaController extends BaseController {
@@ -80,7 +82,7 @@ public class BetaController extends BaseController {
     @RequestMapping(value = "/shiro/del", method = RequestMethod.GET)
     public String shiroDel(){
         Subject subject = SecurityUtils.getSubject();
-        System.out.println(subject.hasRole("admin"));
+        log.info(subject.hasRole("admin") + "");
         return "shiroDel";
     }
 

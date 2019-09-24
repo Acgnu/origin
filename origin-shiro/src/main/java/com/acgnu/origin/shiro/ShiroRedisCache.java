@@ -3,8 +3,11 @@ package com.acgnu.origin.shiro;
 import com.acgnu.origin.redis.RedisHelper;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
 
 public class ShiroRedisCache implements Cache{
@@ -18,15 +21,12 @@ public class ShiroRedisCache implements Cache{
 
     @Override
     public Object get(Object key) throws CacheException {
-        if (null == key) {
-            return null;
-        }
-        return redisHelper.get(prefix + key.toString());
+        return ObjectUtils.isEmpty(key) ? null : redisHelper.get(prefix + key.toString());
     }
 
     @Override
     public Object put(Object k, Object v) throws CacheException {
-        if (k== null || v == null) {
+        if (ObjectUtils.isEmpty(k) || ObjectUtils.isEmpty(v)) {
             return null;
         }
         redisHelper.set(prefix + k.toString(), v);
@@ -35,7 +35,7 @@ public class ShiroRedisCache implements Cache{
 
     @Override
     public Object remove(Object k) throws CacheException {
-        if(k==null){
+        if(ObjectUtils.isEmpty(k)){
             return null;
         }
         Object v = redisHelper.get(prefix + k.toString());

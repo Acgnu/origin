@@ -11,6 +11,7 @@ import cz.mallat.uasparser.UserAgentInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,6 +26,8 @@ import java.util.Set;
 public class AccessLoggerInterceptor implements HandlerInterceptor {
     @Autowired
     private RedisHelper redisHelper;
+    @Autowired
+    private RestTemplate restTemplate;
 
     private String[] excludeUris = new String[]{"/error"};
 
@@ -102,7 +105,7 @@ public class AccessLoggerInterceptor implements HandlerInterceptor {
         }
 
         //解析IP地区
-        IpAnalyseResult ipAreaInfo = RequestUtil.getIpAreaInfo(accessIp);
+        IpAnalyseResult ipAreaInfo = RequestUtil.getIpAreaInfo(accessIp, restTemplate);
 
         //初次访问, 记录访问UV信息
         accessUvLog = new AccessUvLog(System.nanoTime(), //TODO: 模拟一个ID

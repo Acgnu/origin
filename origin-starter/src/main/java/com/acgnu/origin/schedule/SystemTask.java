@@ -15,8 +15,6 @@ public class SystemTask {
     @Autowired
     private RedisHelper redisHelper;
 
-    Logger logger = LoggerFactory.getLogger(getClass());
-
 //    @Scheduled(cron = "* * * * * *")
 //    public void debugLog(){
 //        for (int i = 0; i < 1000; i++){

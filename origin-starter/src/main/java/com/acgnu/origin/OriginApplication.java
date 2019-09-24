@@ -2,7 +2,10 @@ package com.acgnu.origin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.client.RestTemplate;
 
 //@SpringBootApplication
 //public class DemoApplication extends SpringBootServletInitializer {
@@ -24,4 +27,8 @@ public class OriginApplication {
         SpringApplication.run(OriginApplication.class, args);
     }
 
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
+        return restTemplateBuilder.build();
+    }
 }

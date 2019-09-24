@@ -1,0 +1,9 @@
+archivesBaseName = 'origin-shiro'
+
+//jar.enabled = true
+//bootJar.enabled = false
+
+dependencies {
+    compile project(':origin-redis')
+    compile project(':origin-service')
+}

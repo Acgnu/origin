@@ -1,0 +1,8 @@
+archivesBaseName = 'origin-repository'
+
+//jar.enabled = true
+//bootJar.enabled = false
+
+dependencies {
+    compile project(':origin-entity')
+}

@@ -1,59 +1,137 @@
-plugins {
-    id 'org.springframework.boot' version '2.1.7.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-    id 'java'
+buildscript {
+    ext {
+        springBootVersion = '2.1.8.RELEASE'
+    }
+    repositories {
+        maven{url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+        maven{url 'https://mvnrepository.com/'}
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 
-configurations {
-    all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-}
-group = 'com.acgnu'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+allprojects {
 
-repositories {
-    mavenCentral()
 }
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    //ua 解析
-    implementation 'cz.mallat.uasparser:uasparser:0.6.2'
-    //lombok
-    annotationProcessor 'org.projectlombok:lombok:1.18.2'
-    compileOnly 'org.projectlombok:lombok:1.18.2'
-//    testAnnotationProcessor  'org.projectlombok:lombok:1.18.2'
-//    testCompileOnly 'org.projectlombok:lombok:1.18.2'
-    //使用Log4j作为默认日志
-    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
-    //启用AOP
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
-    implementation 'commons-io:commons-io:2.6'
-    //阿里巴巴Fastjson
-    implementation 'com.alibaba:fastjson:1.2.56'
-    //durid数据库连接池
-//    implementation 'com.alibaba:druid-spring-boot-starter:1.1.20'
-    //JSP支持
-    implementation 'javax.servlet:jstl'
-    implementation 'javax.servlet:javax.servlet-api'
-    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
-    //mybatis
-//    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.0'
-//    impleme|ntation 'com.baomidou:mybatis-plus-boot-starter:3.1.0'
-    //spring data jpa
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    //mysql
-    implementation 'mysql:mysql-connector-java:8.0.17'
-    //springboot AMQP
-    implementation 'org.springframework.boot:spring-boot-starter-amqp'
-    //implementation group: 'javax.servlet', name:'spring-boot-devtools', version:'2.0.4.RELEASE'	//热部署
-    //redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'io.spring.dependency-management'
+
+    group = 'com.acgnu'
+    version = '0.0.1.R'
+
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
+
+    //关闭springboot的默认打包 (打包单个jar需要 )
+//    jar.enabled = true
+//    bootJar.enabled = false
+
+//    idea {
+//        module {
+//            inheritOutputDirs = true
+//        }
+//    }
+
+    //[compileJava,compileTestJava,javadoc]*.options*.encoding = 'UTF-8'
+    tasks.withType(JavaCompile){
+        options.encoding="UTF-8"
+        //消除gradle检查过时API警告
+//        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+
+    repositories {
+        maven{url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+        maven{url 'https://mvnrepository.com/'}
+        mavenCentral()
+    }
+
+    jar {
+        manifest {
+//            attributes("Implementation-Title": "Gradle")
+            attributes("Manifest-Version": project.version)
+        }
+
+//        from {
+//            configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+//            configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
+//        }
+        exclude('LICENSE.txt', 'NOTICE.txt', 'rootdoc.txt')
+        exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+        exclude 'META-INF/NOTICE', 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE', 'META-INF/LICENSE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+    }
+
+    //指定目录结构
+//    sourceSets {
+//        main {
+//            java{
+//                srcDir 'src/main/java'
+//            }
+//            resources {
+//                srcDir 'src/main/java'
+//                srcDir 'src/main/resources'
+//            }
+//        }
+//    }
+
+    // 全局设置依赖配置
+    configurations {
+        //   providedRuntime
+        all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+
+    ext {
+        springBootVersion = '2.1.8.RELEASE'
+        lombokVersion = '1.18.2'
+        shiroVersion = '1.2.2'
+    }
+
+    dependencies {
+        implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+        testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+        //启用AOP
+        implementation "org.springframework.boot:spring-boot-starter-aop:$springBootVersion"
+        //spring data jpa
+        implementation "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
+        //springboot AMQP
+        implementation "org.springframework.boot:spring-boot-starter-amqp:$springBootVersion"
+        //使用Log4j作为默认日志
+        implementation "org.springframework.boot:spring-boot-starter-log4j2:$springBootVersion"
+        //redis
+        implementation "org.springframework.boot:spring-boot-starter-data-redis:$springBootVersion"
 //	implementation 'org.springframework.boot:spring-boot-starter-cache'
-    //shiro
-    implementation 'org.apache.shiro:shiro-core:1.2.2'
-    implementation 'org.apache.shiro:shiro-spring:1.2.2'
-    //MongoDB
-    implementation 'org.mongodb:mongodb-driver-sync:3.10.1'
+        //lombok
+        annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+        compileOnly "org.projectlombok:lombok:$lombokVersion"
+//    testAnnotationProcessor  "org.projectlombok:lombok:$lombokVersion"
+//    testCompileOnly "org.projectlombok:lombok:$lombokVersion"
+        //阿里巴巴Fastjson
+        implementation "com.alibaba:fastjson:1.2.60"
+        //durid数据库连接池
+//    implementation "com.alibaba:druid-spring-boot-starter:1.1.20"
+        //JSP支持
+        //implementation "javax.servlet:jstl"
+        //implementation "javax.servlet:javax.servlet-api"
+        //implementation "org.apache.tomcat.embed:tomcat-embed-jasper"
+        //mybatis
+//    implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.0"
+//    impleme|ntation "com.baomidou:mybatis-plus-boot-starter:3.1.0"
+        //implementation group: "javax.servlet", name:"spring-boot-devtools", version:"2.0.4.RELEASE"	//热部署
+        //MongoDB
+        implementation "org.mongodb:mongodb-driver-sync:3.10.1"
+        //mysql
+        implementation "mysql:mysql-connector-java:8.0.17"
+        //ua 解析
+        implementation "cz.mallat.uasparser:uasparser:0.6.2"
+        implementation "org.apache.shiro:shiro-core:$shiroVersion"
+        implementation "org.apache.shiro:shiro-spring:$shiroVersion"
+        //其他
+        implementation "commons-io:commons-io:2.6"
+    }
 }

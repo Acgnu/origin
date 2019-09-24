@@ -1,0 +1,85 @@
+archivesBaseName = 'origin-starter'
+
+apply plugin: 'org.springframework.boot'
+
+jar.enabled = true
+bootJar.enabled = false
+//使用bootJar运行时候, 开启以下配置将项目打包成一个jar
+//jar.enabled = false
+//bootJar.enabled = true
+
+buildscript {
+    //构建时跳过执行@Test ( 也无法直接debug运行 )
+    gradle.taskGraph.whenReady {
+        tasks.each { task ->
+            if (task.name.contains("test"))
+            {
+                task.enabled = false
+            }
+        }
+    }
+}
+
+dependencies {
+    compile project(':origin-common')
+    compile project(':origin-rabbitmq')
+    compile project(':origin-repository')
+    compile project(':origin-shiro')
+    compile project(':origin-entity')
+    compile project(':origin-service')
+    compile project(':origin-redis')
+}
+
+//打包jar参数
+jar {
+    manifest {
+        attributes(
+                "Main-Class": "com.acgnu.origin.OriginApplication",
+                "Class-Path":  configurations.runtime.collect { "lib/${it.name}" }.join(' ')
+        )
+    }
+    //打包jar包的resource文件夹时排除以下文件
+    exclude '**/*.properties',  'static'
+    //jar包输出目录
+//    destinationDir = file('build/distributions')
+}
+
+//打包成zip
+task releaseToZip(type:Zip, dependsOn:['clean', 'jar']){
+    metadataCharset "UTF-8"
+    extension "zip"
+    into(project.name){
+        from("bin/")
+        into("lib"){
+            from(configurations.compile)
+        }
+        into("config"){
+            from("src/main/resources/")
+            exclude '**/*.txt', '**/*.xml', '**/*.ico'
+        }
+        into("webapp"){
+            from("src/main/webapp")
+        }
+        from ('build/libs/')
+    }
+}
+
+//复制依赖以及配置等到指定目录
+task releaseToFolder(type: Copy, dependsOn:['clean', 'jar']) {
+    into "$buildDir/distributions/"
+    into('lib'){
+        from configurations.compile
+    }
+    into('config'){
+        from 'src/main/resources'
+        exclude '**/*.txt', '**/*.xml', '**/*.ico'
+    }
+    into('webapp'){
+        from 'src/main/webapp'
+    }
+    from ('build/libs/')
+}
+
+//指定任务分组
+releaseToFolder.group=BasePlugin.BUILD_GROUP
+releaseToZip.group=BasePlugin.BUILD_GROUP

@@ -1,0 +1,7 @@
+archivesBaseName = 'origin-entity'
+
+//jar.enabled = true
+//bootJar.enabled = false
+
+dependencies {
+}

@@ -1,0 +1,7 @@
+archivesBaseName = 'origin-redis'
+
+//jar.enabled = true
+//bootJar.enabled = false
+
+dependencies {
+}

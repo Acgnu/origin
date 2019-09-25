@@ -11,12 +11,12 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.Optional;
 
 @Slf4j
 public class RequestUtil {
     private static UASparser uasParser;
+
     static {
         try {
             uasParser = new UASparser(OnlineUpdater.getVendoredInputStream());
@@ -47,8 +47,8 @@ public class RequestUtil {
      * @return
      */
     public static IpAnalyseResult getIpAreaInfo(String ip, RestTemplate restTemplate) {
-        JSONObject result = restTemplate.getForObject("http://api.online-service.vip/ip3?ip=" + ip, JSONObject.class);
-        IpAnalyseResult analyseResult = JSON.toJavaObject(result.getJSONObject("data"), IpAnalyseResult.class);
+        var result = restTemplate.getForObject("http://api.online-service.vip/ip3?ip=" + ip, JSONObject.class);
+        var analyseResult = JSON.toJavaObject(result.getJSONObject("data"), IpAnalyseResult.class);
         return Optional.ofNullable(analyseResult).orElseGet(IpAnalyseResult::new);
     }
 
@@ -59,7 +59,7 @@ public class RequestUtil {
      */
     public static String getClientIpAddress(HttpServletRequest request) {
         for (String header : HEADERS_TO_TRY) {
-            String ip = request.getHeader(header);
+            var ip = request.getHeader(header);
             if (!StringUtils.isEmpty(ip) && !"unknown".equalsIgnoreCase(ip)) {
                 return ip;
             }
@@ -75,9 +75,9 @@ public class RequestUtil {
     public static UserAgentInfo parseUserAgent(HttpServletRequest request) {
         UserAgentInfo userAgentInfo = null;
         try {
-            String userAgent = request.getHeader("User-Agent");
+            var userAgent = request.getHeader("User-Agent");
             userAgentInfo = uasParser.parse(userAgent);
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("UA解析失败", e);
         }
         return userAgentInfo;

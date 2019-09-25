@@ -7,17 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
-//@SpringBootApplication
-//public class DemoApplication extends SpringBootServletInitializer {
-//	@Override
-//	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-//		return application.sources(DemoApplication.class);
-//	}
-//
-//	public static void main(String[] args) {
-//		SpringApplication.run(DemoApplication.class, args);
-//	}
-//}
 //@MapperScan("com.acgnu.origin.mapper")
 //@ComponentScan("com.acgnu.origin")
 @SpringBootApplication

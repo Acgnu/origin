@@ -2,7 +2,6 @@ package com.acgnu.origin.controller;
 
 import com.acgnu.origin.common.Constants;
 import com.acgnu.origin.entity.AccessUvLog;
-import com.acgnu.origin.entity.Accesser;
 import com.acgnu.origin.pojo.RestResult;
 import com.acgnu.origin.redis.RedisHelper;
 import com.acgnu.origin.redis.RedisKeyConst;
@@ -12,14 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.amqp.rabbit.core.RabbitMessagingTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 @RestController
@@ -36,7 +35,7 @@ public class BetaController extends BaseController {
 
     @GetMapping("/accessLog")
     public List<AccessUvLog> accessLog(){
-        Set<String> accessIpKes = redisHelper.keys(RedisKeyConst.ACCESS_IP_PRE + "*");
+        var accessIpKes = redisHelper.keys(RedisKeyConst.ACCESS_IP_PRE + "*");
         //        Optional<AccessUvLog> optionalAccessUvLog = accessUvLogRepository.findById(1L);
 //        List<AccessUvLog> list = new ArrayList<>();
 //        list.add(optionalAccessUvLog.orElseGet(AccessUvLog::new));
@@ -49,8 +48,8 @@ public class BetaController extends BaseController {
      */
     @GetMapping("/demo")    //使用GetMapping可以省略method
     public RestResult demoData() {
-        Accesser accesser = simpleService.findOne(1);
-        return new RestResult<>(Constants.API_CODE_SUCCESS, Constants.API_MSG_SUCCESS, accesser);
+        var user = simpleService.findOne(1);
+        return new RestResult<>(Constants.API_CODE_SUCCESS, Constants.API_MSG_SUCCESS, user);
     }
 
     /**
@@ -68,7 +67,7 @@ public class BetaController extends BaseController {
      * shiro访问控制1
      * 通过shiro角色控制
      */
-//    @RequiresPermissions("see")
+    @RequiresPermissions("see")
     @RequestMapping(value = "/shiro/see", method = RequestMethod.GET)
     public String shiroSee(){
         return "shiroSee";
@@ -78,10 +77,10 @@ public class BetaController extends BaseController {
      * shiro访问控制2
      * 通过shiro权限控制
      */
-//    @RequiresRoles("admin")
+    @RequiresRoles("admin")
     @RequestMapping(value = "/shiro/del", method = RequestMethod.GET)
     public String shiroDel(){
-        Subject subject = SecurityUtils.getSubject();
+        var subject = SecurityUtils.getSubject();
         log.info(subject.hasRole("admin") + "");
         return "shiroDel";
     }
@@ -89,22 +88,5 @@ public class BetaController extends BaseController {
     @RequestMapping(value = {"login", "success", "deny"})
     public String login(HttpServletRequest request){
         return request.getRequestURI();
-    }
-
-    /**
-     * shiro访问控制3
-     */
-    @RequestMapping(value = "/shiro/login/{name}/{password}", method = RequestMethod.GET)
-    public String shiroLogin(@PathVariable(value = "name") String name, @PathVariable(value = "password") String password){
-        String result = "success";
-        Subject subject = SecurityUtils.getSubject();
-        try {
-            UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(name, password);
-            subject.login(usernamePasswordToken);
-        } catch (AuthenticationException e) {
-            result = e.getLocalizedMessage();
-            subject.logout();
-        }
-        return result;
     }
 }

@@ -59,7 +59,7 @@ public class RedisConfig extends CachingConfigurerSupport{
 //                .build();
 //        return cacheManager;
 
-        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+        var config = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofSeconds(60))
                 .disableCachingNullValues();
 
@@ -88,9 +88,8 @@ public class RedisConfig extends CachingConfigurerSupport{
 //    }
     @Bean
     public RedisTemplate redisTemplate(RedisConnectionFactory factory) {
-        StringRedisTemplate template = new StringRedisTemplate(factory);
-
-        RedisSerializer keySerializer = new StringRedisSerializer(); // 设置key序列化类，否则key前面会多了一些乱码
+        var template = new StringRedisTemplate(factory);
+        var keySerializer = new StringRedisSerializer(); // 设置key序列化类，否则key前面会多了一些乱码
         template.setKeySerializer(keySerializer);
         setValueSerializer(template);//设置value序列化
         template.afterPropertiesSet();
@@ -100,15 +99,12 @@ public class RedisConfig extends CachingConfigurerSupport{
 
     private void setValueSerializer(StringRedisTemplate template) {
         @SuppressWarnings({"rawtypes", "unchecked"})
-        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
-        ObjectMapper om = new ObjectMapper();
-        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        // 解决jackson2无法反序列化LocalDateTime的问题
-        om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        om.registerModule(new JavaTimeModule());
-
-        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-        jackson2JsonRedisSerializer.setObjectMapper(om);
+        var jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+        jackson2JsonRedisSerializer.setObjectMapper(new ObjectMapper()
+                .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY)
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS) // 解决jackson2无法反序列化LocalDateTime的问题
+                .registerModule(new JavaTimeModule())
+                .enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL));
         template.setValueSerializer(jackson2JsonRedisSerializer);
     }
 }

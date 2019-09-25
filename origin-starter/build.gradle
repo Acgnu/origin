@@ -10,7 +10,7 @@ buildscript {
         tasks.each { task ->
             if (task.name.contains("test"))
             {
-                task.enabled = false
+//                task.enabled = false
             }
         }
     }

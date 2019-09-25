@@ -1,6 +1,5 @@
 package com.acgnu.origin.shiro;
 
-import com.acgnu.origin.entity.Accesser;
 import com.acgnu.origin.service.SimpleService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -12,8 +11,6 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
-
-import java.util.Optional;
 
 public class ShiroRealm extends AuthorizingRealm{
     //数据查询
@@ -28,12 +25,12 @@ public class ShiroRealm extends AuthorizingRealm{
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         //获取登录的用户名
-        String name = (String) principals.getPrimaryPrincipal();
+        var name = (String) principals.getPrimaryPrincipal();
         //查询
-        Accesser admin = simpleService.findUserByUname(name);
+        var admin = simpleService.findUserByUname(name);
 
         //添加角色和权限
-        SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+        var simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         admin.getRoles().forEach(role -> {
             simpleAuthorizationInfo.addRole(role.getRoleName());
             role.getPrivileges().forEach(privilege -> simpleAuthorizationInfo.addStringPermission(privilege.getUri()));
@@ -56,9 +53,8 @@ public class ShiroRealm extends AuthorizingRealm{
         }
 
         //获取用户
-        String name = token.getPrincipal().toString();
-        Accesser admin = simpleService.findUserByUname(name);
-        Optional<Accesser> optional = Optional.ofNullable(admin);
-        return optional.isPresent() ? new SimpleAuthenticationInfo(name, optional.get().getUpass(), getName()) : null;
+        var name = token.getPrincipal().toString();
+        var admin = simpleService.findUserByUname(name);
+        return null == admin ? null : new SimpleAuthenticationInfo(name, admin.getUpass(), getName());
     }
 }

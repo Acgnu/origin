@@ -1,22 +1,26 @@
 package com.acgnu.origin.shiro;
 
 import com.acgnu.origin.redis.RedisHelper;
+import com.acgnu.origin.service.PrivilegeService;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 @Configuration
 public class ShiroConfig {
+    @Autowired
+    private PrivilegeService privilegeService;
+
     @Bean
     public ShiroRealm getCustomerShiroRealm(){
         return new ShiroRealm();
@@ -24,7 +28,7 @@ public class ShiroConfig {
 
     @Bean
     public DefaultWebSecurityManager securityManager(ShiroRealm realm, RedisHelper template){
-        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        var securityManager = new DefaultWebSecurityManager();
         // 配置 缓存管理类 cacheManager，这个cacheManager必须要在前面执行，因为setRealm 和 setSessionManage都有方法初始化了cachemanager,看下源码就知道了
         securityManager.setCacheManager(cacheManager(template));
         securityManager.setRealm(getCustomerShiroRealm());
@@ -33,14 +37,18 @@ public class ShiroConfig {
 
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
-        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        var shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        var allPrivilege = privilegeService.findAll();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        Map<String, String> map = new HashMap<>();
+        var map = new HashMap<String, String>();
         //配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了
-        map.put("/logout","logout");
+        map.put("/user/signout","logout");
         //authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访
-        map.put("/shiro/login/**","anon");
-        map.put("/shiro/**","authc");
+        map.put("/user/signin","anon");
+        allPrivilege.stream().forEach(privilege -> {
+            map.put(privilege.getUri(),"authc");
+        });
+//        map.put("/shiro/**","authc");
         shiroFilterFactoryBean.setLoginUrl("/login");
         shiroFilterFactoryBean.setSuccessUrl("/success");
         shiroFilterFactoryBean.setUnauthorizedUrl("/deny");
@@ -55,8 +63,8 @@ public class ShiroConfig {
      */
     @Bean
     public SimpleMappingExceptionResolver createSimpleMappingExceptionResolver(){
-        SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
-        Properties mappings = new Properties();
+        var simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
+        var mappings = new Properties();
         mappings.setProperty("UnauthorizedException", "/deny");
 //        mappings.setProperty("DatabaseException", "/error");
         simpleMappingExceptionResolver.setExceptionMappings(mappings);
@@ -68,19 +76,17 @@ public class ShiroConfig {
     //加入注解的使用，不加入这个注解不生效
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
-        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        var authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
     }
-    //同上
-    @Bean
-    public LifecycleBeanPostProcessor getLifecycleBeanPostProcessor(){
-        return new LifecycleBeanPostProcessor();
-    }
+
     //同上
     @Bean
     public DefaultAdvisorAutoProxyCreator getDefaultAdvisorAutoProxyCreator(){
-        return new DefaultAdvisorAutoProxyCreator();
+        DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+        advisorAutoProxyCreator.setProxyTargetClass(true);
+        return advisorAutoProxyCreator;
     }
 
     //使用自定义的缓存管理

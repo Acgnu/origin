@@ -3,11 +3,9 @@ package com.acgnu.origin.interceptor;
 import com.acgnu.origin.common.RequestUtil;
 import com.acgnu.origin.entity.AccessPvLog;
 import com.acgnu.origin.entity.AccessUvLog;
-import com.acgnu.origin.pojo.IpAnalyseResult;
 import com.acgnu.origin.redis.RedisHelper;
 import com.acgnu.origin.redis.RedisKeyConst;
 import com.alibaba.fastjson.JSON;
-import cz.mallat.uasparser.UserAgentInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.Set;
 
 @Slf4j
 @Component
@@ -28,8 +25,6 @@ public class AccessLoggerInterceptor implements HandlerInterceptor {
     private RedisHelper redisHelper;
     @Autowired
     private RestTemplate restTemplate;
-
-    private String[] excludeUris = new String[]{"/error"};
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -46,22 +41,17 @@ public class AccessLoggerInterceptor implements HandlerInterceptor {
 //        while (headerNames.hasMoreElements()) {
 //            System.err.println(request.getHeader(headerNames.nextElement()));
 //        }
-        //错误页面不进行统计
-        for (String excludeUri : excludeUris) {
-            if (excludeUri.equals(request.getRequestURI())) {
-                return;
-            }
-        }
 
         //获取请求UA
-        UserAgentInfo userAgentInfo = RequestUtil.parseUserAgent(request);
+        var userAgentInfo = RequestUtil.parseUserAgent(request);
         //获取请求IP
-        String accessIp = RequestUtil.getClientIpAddress(request);
+        var accessIp = RequestUtil.getClientIpAddress(request);
 
         //访问UV信息
-        AccessUvLog accessUvLog = (AccessUvLog) redisHelper.get(RedisKeyConst.ACCESS_IP_PRE + accessIp);
+        var accessUvLog = (AccessUvLog) redisHelper.get(RedisKeyConst.ACCESS_IP_PRE + accessIp);
+
         //访问PV信息
-        AccessPvLog newAccessPv = new AccessPvLog(0L,       //默认初始化为0
+        var newAccessPv = new AccessPvLog(0L,       //默认初始化为0
                 0L,
                 request.getRequestURI(),
                 userAgentInfo.getDeviceType(),
@@ -73,39 +63,37 @@ public class AccessLoggerInterceptor implements HandlerInterceptor {
         //如果不是初次访问
         if (null != accessUvLog) {
             //更新UV信息
-            accessUvLog.setTotalAccess(accessUvLog.getTotalAccess() + 1L);
+            accessUvLog.setTotalAccess(Math.incrementExact(accessUvLog.getTotalAccess()));
             accessUvLog.setLastAccessTime(LocalDateTime.now());
 
             //更新PV信息
-            Set<AccessPvLog> accessPvLogs = accessUvLog.getAccessPvLogs();
+            var accessPvLogs = accessUvLog.getAccessPvLogs();
+
             //查询此IP下是否有此链接的访问记录
-            boolean isMatch = false;
-            for (AccessPvLog accessPvLog : accessPvLogs) {
-                if (request.getRequestURI().equals(accessPvLog.getUri())) {
-                    //更新可能发生改变的信息
-                    accessPvLog.setDevice(userAgentInfo.getDeviceType());
-                    accessPvLog.setOs(userAgentInfo.getOsName());
-                    accessPvLog.setBroswer(userAgentInfo.getUaName());
-                    //更新频次和时间
-                    accessPvLog.setFrequency(accessPvLog.getFrequency() + 1);
-                    accessPvLog.setUpdateTime(LocalDateTime.now());
-                    isMatch = true;
-                    break;
-                }
-            }
-            //没有匹配到则添加新项
-            if (!isMatch) {
-                //记录访问PV信息
-                newAccessPv.setUvid(accessUvLog.getId());
+            var matchedPvLog = accessPvLogs.stream()
+                    .filter(accessPvLog -> request.getRequestURI().equals(accessPvLog.getUri()))
+                    .findFirst();
+
+            var accessUvLogId = accessUvLog.getId();
+            matchedPvLog.ifPresentOrElse(accessPvLog -> {
+                accessPvLog.setDevice(userAgentInfo.getDeviceType());
+                accessPvLog.setOs(userAgentInfo.getOsName());
+                accessPvLog.setBroswer(userAgentInfo.getUaName());
+                //更新频次和时间
+                accessPvLog.setFrequency(Math.incrementExact(accessPvLog.getFrequency()));
+                accessPvLog.setUpdateTime(LocalDateTime.now());
+            }, () -> {
+                newAccessPv.setUvid(accessUvLogId);
                 accessPvLogs.add(newAccessPv);
-            }
-            redisHelper.set(RedisKeyConst.ACCESS_IP_PRE + accessIp, accessUvLog, 7776000);
+            });
+
+            redisHelper.set(RedisKeyConst.ACCESS_IP_PRE + accessIp, accessUvLog, RedisKeyConst.TIME_SECOND_DAY  * 90);
             log.info("Access Log: {}", JSON.toJSONString(accessUvLog));
             return;
         }
 
         //解析IP地区
-        IpAnalyseResult ipAreaInfo = RequestUtil.getIpAreaInfo(accessIp, restTemplate);
+        var ipAreaInfo = RequestUtil.getIpAreaInfo(accessIp, restTemplate);
 
         //初次访问, 记录访问UV信息
         accessUvLog = new AccessUvLog(System.nanoTime(), //TODO: 模拟一个ID
@@ -123,7 +111,7 @@ public class AccessLoggerInterceptor implements HandlerInterceptor {
         accessUvLog.getAccessPvLogs().add(newAccessPv);
 
         //缓存记录
-        redisHelper.set(RedisKeyConst.ACCESS_IP_PRE + accessIp, accessUvLog, 7776000);
+        redisHelper.set(RedisKeyConst.ACCESS_IP_PRE + accessIp, accessUvLog, RedisKeyConst.TIME_SECOND_DAY  * 90);
         log.info("Access Log: {}", JSON.toJSONString(accessUvLog));
     }
 }

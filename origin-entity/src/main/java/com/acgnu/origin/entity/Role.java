@@ -23,7 +23,7 @@ public class Role {
     private LocalDateTime createTime;
 
     @ManyToMany(targetEntity = Privilege.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinTable(name = "accesser_role", joinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")},
+    @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "p_id", referencedColumnName = "id")})
     private Set<Privilege> privileges;
 }

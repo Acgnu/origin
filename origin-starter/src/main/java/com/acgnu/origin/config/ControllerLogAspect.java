@@ -22,7 +22,6 @@ import java.util.UUID;
 @Component
 public class ControllerLogAspect {
     private String REQUEST_ID_KEY = "_requestId";
-    private HttpServletRequest request;
 
     @Pointcut("execution(public * com.acgnu.origin.controller.*.*(..))")
     public void debugLog(){ }
@@ -30,11 +29,11 @@ public class ControllerLogAspect {
     //前置通知
     @Before("debugLog()")
     public void doBefore(JoinPoint joinPoint){
-        ServletRequestAttributes attributes=(ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        request=attributes.getRequest();
+        var attributes=(ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        var request=attributes.getRequest();
 
         // 记录请求参数
-        String requestId = UUID.randomUUID().toString();
+        var requestId = UUID.randomUUID().toString();
         request.setAttribute(REQUEST_ID_KEY, requestId);
         log.debug("\n reqId: {}\n ip: {}\n uri: {}\n header: {}\n invoke: {} -> {}\n params: {}\n args: {}",
                 request.getAttribute(REQUEST_ID_KEY),
@@ -49,6 +48,8 @@ public class ControllerLogAspect {
 
     @AfterReturning(returning = "object", pointcut = "debugLog()")
     public void doAfterReturning(Object object){
+        var attributes=(ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        var request=attributes.getRequest();
         //记录响应参数
         log.debug("\n reqId: {}\n response: {}", request.getAttribute(REQUEST_ID_KEY), JSON.toJSONString(object));
     }

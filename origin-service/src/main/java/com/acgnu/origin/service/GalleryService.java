@@ -26,7 +26,7 @@ public class GalleryService {
     }
 
     public Image getImageInfo(long id) {
-        Optional<Image> optional = imageRepository.findById(id);
+        var optional = imageRepository.findById(id);
         return optional.orElseGet(Image::new);
     }
 }

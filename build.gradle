@@ -92,7 +92,7 @@ subprojects {
     ext {
         springBootVersion = '2.1.8.RELEASE'
         lombokVersion = '1.18.2'
-        shiroVersion = '1.2.2'
+        shiroVersion = '1.4.1'
     }
 
     dependencies {

@@ -1,6 +1,6 @@
 package com.acgnu.origin.service;
 
-import com.acgnu.origin.repository.AccesserRepository;
+import com.acgnu.origin.repository.UserRepository;
 import com.acgnu.origin.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -8,23 +8,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
 public class SimpleService {
     @Autowired
-    private AccesserRepository accesserRepository;
+    private UserRepository userRepository;
 
-    public List<Accesser> findAll(){
+    public List<User> findAll(){
 //        return simpleMapper.findAll();
         return null;
     }
 
     @Cacheable("db0")
-    public Accesser findOne(int id){
-        Optional<Accesser> optional = accesserRepository.findById(id);
-        return optional.orElseGet(Accesser::new);
+    public User findOne(int id){
+        var optional = userRepository.findById(id);
+        return optional.orElseGet(User::new);
     }
 
     /**
@@ -32,8 +31,8 @@ public class SimpleService {
      * @param name
      * @return
      */
-    public Accesser findUserByUname(String name){
-        return accesserRepository.getByUname(name);
+    public User findUserByUname(String name){
+        return userRepository.getByUname(name);
     }
 
 //    public AccessLog findAccessLogByHash(String accessHash) {

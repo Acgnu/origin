@@ -5,6 +5,7 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.junit.Test;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -15,11 +16,17 @@ import java.io.*;
 import java.net.Socket;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 public class CommonUnitTest {
+    @Test
+    public void testOptional(){
+        var list = new ArrayList();
+        list.add(1);
+        list.add("1");
+        list.stream().forEach(System.out::print);
+    }
+
     public void testMongo() {
         try {
             MongoClient mongoClient = MongoClients.create();

@@ -9,8 +9,8 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "accesser")
-public class Accesser {
+@Table(name = "users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -22,7 +22,7 @@ public class Accesser {
     private String upass;
 
     @ManyToMany(targetEntity = Role.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinTable(name = "accesser_role", joinColumns = {@JoinColumn(name = "uid", referencedColumnName = "id")},
+    @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "uid", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     private Set<Role> roles;
 }

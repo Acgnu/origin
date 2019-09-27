@@ -1,5 +1,6 @@
 package com.acgnu.origin.redis;
 
+import com.acgnu.origin.util.MessageHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -18,6 +19,8 @@ import java.util.concurrent.TimeUnit;
 public class RedisHelper {
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private MessageHolder messageHolder;
 
     /**
      * 指定缓存失效时间
@@ -138,7 +141,7 @@ public class RedisHelper {
      */
     public long incr(String key, long delta) {
         if (delta < 0) {
-            throw new RuntimeException("递增因子必须大于0");
+            throw new RuntimeException(messageHolder.lGet("redis-helper.incr.hint"));
         }
         return redisTemplate.opsForValue().increment(key, delta);
     }
@@ -152,7 +155,7 @@ public class RedisHelper {
      */
     public long decr(String key, long delta) {
         if (delta < 0) {
-            throw new RuntimeException("递减因子必须大于0");
+            throw new RuntimeException(messageHolder.lGet("redis-helper.decr.hint"));
         }
         return redisTemplate.opsForValue().increment(key, -delta);
     }

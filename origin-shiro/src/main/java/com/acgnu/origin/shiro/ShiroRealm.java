@@ -1,21 +1,23 @@
 package com.acgnu.origin.shiro;
 
-import com.acgnu.origin.service.SimpleService;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import com.acgnu.origin.pojo.LoginCredential;
+import com.acgnu.origin.service.UserService;
+import com.acgnu.origin.util.MessageHolder;
+import net.bytebuddy.utility.RandomString;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ObjectUtils;
 
 public class ShiroRealm extends AuthorizingRealm{
     //数据查询
     @Autowired
-    private SimpleService simpleService;
+    private UserService userService;
+    @Autowired
+    private MessageHolder messageHolder;
 
     /**
      * 获取角色和权限
@@ -25,9 +27,9 @@ public class ShiroRealm extends AuthorizingRealm{
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         //获取登录的用户名
-        var name = (String) principals.getPrimaryPrincipal();
+        var loginCredential = (LoginCredential) principals.getPrimaryPrincipal();
         //查询
-        var admin = simpleService.findUserByUname(name);
+        var admin = userService.findUserByUname(loginCredential.getUname());
 
         //添加角色和权限
         var simpleAuthorizationInfo = new SimpleAuthorizationInfo();
@@ -47,14 +49,21 @@ public class ShiroRealm extends AuthorizingRealm{
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        //加这一步的目的是在Post请求的时候会先进认证，然后在到请求
-        if (ObjectUtils.isEmpty(token.getPrincipal())) {
-            return null;
+        //用户登陆校验
+        var uname = token.getPrincipal().toString();
+        var user = userService.findUserByUname(uname);
+
+        if (null == user) {
+            throw new UnknownAccountException(messageHolder.lGet("user.login.account-error"));
         }
 
-        //获取用户
-        var name = token.getPrincipal().toString();
-        var admin = simpleService.findUserByUname(name);
-        return null == admin ? null : new SimpleAuthenticationInfo(name, admin.getUpass(), getName());
+        if (user.isLocked()) {
+            throw new LockedAccountException(messageHolder.lGet("user.login.account-locked"));
+        }
+
+        var loginCredential = new LoginCredential(user.getId(), user.getUname(), user.getNick(), RandomString.make(16));
+        var credentialsSalt = ByteSource.Util.bytes(user.getSalt());
+        //调用shiro登陆, 如果凭证匹配则将登陆凭证信息存入subject中, 不匹配则抛异常
+        return new SimpleAuthenticationInfo(loginCredential, user.getUpass(), credentialsSalt, getName());
     }
 }

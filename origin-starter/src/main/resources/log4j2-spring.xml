@@ -140,7 +140,6 @@
     <Loggers>
 <!--        过滤无用日志-->
         <logger name="com.acgnu" level="DEBUG">
-            <AppenderRef ref="Console"/>
             <AppenderRef ref="debugLog"/>
         </logger>
 

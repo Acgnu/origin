@@ -1,9 +1,7 @@
 archivesBaseName = 'origin-service'
 
-//jar.enabled = true
-//bootJar.enabled = false
-
 dependencies {
     compile project(':origin-entity')
     compile project(':origin-repository')
+    compile project(':origin-common')
 }

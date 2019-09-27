@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/ten/dns")
 public class TenDnsController {
+//    @RequiresPermissions("/ten/dns/record/list")
     @PostMapping("/record/list")
     public String recordList() {
         return "recordList";
@@ -17,6 +18,7 @@ public class TenDnsController {
         return "add";
     }
 
+//    @RequiresPermissions("/ten/dns/record/del")
     @PostMapping("/record/del")
     public String delDnsRecord() {
         return "delete";

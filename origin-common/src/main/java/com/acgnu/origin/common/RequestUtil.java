@@ -1,6 +1,6 @@
 package com.acgnu.origin.common;
 
-import com.acgnu.origin.pojo.IpAnalyseResult;
+import com.acgnu.origin.pojo.IPbaseInfo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import cz.mallat.uasparser.OnlineUpdater;
@@ -46,10 +46,10 @@ public class RequestUtil {
      * @param ip
      * @return
      */
-    public static IpAnalyseResult getIpAreaInfo(String ip, RestTemplate restTemplate) {
+    public static IPbaseInfo getIpAreaInfo(String ip, RestTemplate restTemplate) {
         var result = restTemplate.getForObject("http://api.online-service.vip/ip3?ip=" + ip, JSONObject.class);
-        var analyseResult = JSON.toJavaObject(result.getJSONObject("data"), IpAnalyseResult.class);
-        return Optional.ofNullable(analyseResult).orElseGet(IpAnalyseResult::new);
+        var analyseResult = JSON.toJavaObject(result.getJSONObject("data"), IPbaseInfo.class);
+        return Optional.ofNullable(analyseResult).orElseGet(IPbaseInfo::new);
     }
 
     /***

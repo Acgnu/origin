@@ -1,9 +1,14 @@
 package com.acgnu.origin.pojo;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class IpAnalyseResult {
+/**
+ * ip归属地基本信息
+ */
+@Getter
+@Setter
+public class IPbaseInfo {
     private String country;
     private String province;
     private String city;

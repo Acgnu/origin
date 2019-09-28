@@ -136,5 +136,7 @@ subprojects {
         implementation "org.apache.shiro:shiro-spring:$shiroVersion"
         //其他
         implementation "commons-io:commons-io:2.6"
+        //启用JANSI支持, 打印彩色日志
+//        implementation 'org.fusesource.jansi:jansi:1.18'
     }
 }

@@ -16,7 +16,10 @@
         <!--这个输出控制台的配置-->
         <Console name="Console" target="SYSTEM_OUT">
             <!--输出日志的格式-->
-            <PatternLayout pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n"/>
+<!--            <PatternLayout disableAnsi="false" noConsoleNoAnsi="false" pattern="%date{HH:mm:ss.SSS}  %highlight{[%level]}[%thread]%highlight{[%class][%line]:%message%n}"/>-->
+            <PatternLayout
+                    pattern="[%style{%date{HH:mm:ss.SSS}}{bright,green}][%highlight{%p}][%style{%t}{bright,blue}][%style{%C}{bright,yellow}]: %msg%n%style{%throwable}{red}"
+                    disableAnsi="false" noConsoleNoAnsi="false"/>
         </Console>
 
 <!--        debug日志-->

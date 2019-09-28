@@ -88,7 +88,6 @@ public class AccessLoggerInterceptor implements HandlerInterceptor {
             });
 
             redisHelper.set(RedisKeyConst.ACCESS_IP_PRE + accessIp, accessUvLog, RedisKeyConst.TIME_SECOND_DAY  * 90);
-            log.info("Access Log: {}", JSON.toJSONString(accessUvLog));
             return;
         }
 

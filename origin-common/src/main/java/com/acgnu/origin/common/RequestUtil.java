@@ -11,7 +11,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 @Slf4j
 public class RequestUtil {
@@ -81,5 +83,20 @@ public class RequestUtil {
             log.error("UA解析失败", e);
         }
         return userAgentInfo;
+    }
+
+
+    /**
+     * HTTP协议POST请求添加参数的封装方法
+     */
+    public static String concatQueryString(TreeMap<String, String> paramsMap) {
+        if (null == paramsMap || paramsMap.isEmpty()) {
+            return "";
+        }
+        var param = new StringBuilder();
+        for (var e : paramsMap.entrySet()) {
+            param.append("&").append(e.getKey().strip()).append("=").append(e.getValue().strip());
+        }
+        return param.deleteCharAt(0).toString();
     }
 }

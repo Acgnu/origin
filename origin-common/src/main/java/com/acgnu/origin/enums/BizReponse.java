@@ -4,12 +4,14 @@ import com.acgnu.origin.util.MessageHolder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
 /**
  * 系统错误码
  */
-@Getter
 @AllArgsConstructor
-public enum ResultEnum {
+public enum BizReponse {
     SUCCESS(1000, "eurm.result.success"),
     E_BUSSINESS(2000, "eurm.result.error-biz"),
     E_LOGIC(2100, "eurm.result.error-logic"),
@@ -18,6 +20,7 @@ public enum ResultEnum {
     E_REQ(3100, "eurm.result.error-request"),
     E_UNKNOW(0, "eurm.result.error-unknow");
 
+    @Getter
     private int code;
     private String value;
 

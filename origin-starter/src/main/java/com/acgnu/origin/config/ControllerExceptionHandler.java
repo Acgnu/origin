@@ -1,6 +1,6 @@
 package com.acgnu.origin.config;
 
-import com.acgnu.origin.enums.ResultEnum;
+import com.acgnu.origin.enums.BizReponse;
 import com.acgnu.origin.exception.AccessException;
 import com.acgnu.origin.exception.ArgException;
 import com.acgnu.origin.exception.BizException;
@@ -27,25 +27,25 @@ public class ControllerExceptionHandler {
     @ResponseBody
     public Result handleBizException(Throwable e){
         log.error(e.getMessage(), e);
-        return new Result(ResultEnum.E_BUSSINESS.getCode(), e.getMessage());
+        return new Result(BizReponse.E_BUSSINESS, messageHolder);
     }
 
     @ExceptionHandler(ArgException.class)
     @ResponseBody
     public Result handleArgException(Throwable e){
-        return new Result(ResultEnum.E_REQ_ARG.getCode(), e.getMessage());
+        return new Result(BizReponse.E_REQ_ARG, messageHolder);
     }
 
     @ExceptionHandler(AccessException.class)
     @ResponseBody
     public Result handAccessExcption(Throwable e) {
         log.error(e.getMessage(), e);
-        return new Result(ResultEnum.E_REQ.getCode(), e.getMessage());
+        return new Result(BizReponse.E_REQ, messageHolder);
     }
 
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseBody
     public Result handleUnauthorized(Throwable throwable) {
-        return new Result(ResultEnum.E_REQ_UNAUTH.getCode(), throwable.getMessage());
+        return new Result(BizReponse.E_REQ_UNAUTH, messageHolder);
     }
 }

@@ -1,6 +1,6 @@
 package com.acgnu.origin.controller;
 
-import com.acgnu.origin.enums.ResultEnum;
+import com.acgnu.origin.enums.BizReponse;
 import com.acgnu.origin.pojo.Result;
 import com.acgnu.origin.util.MessageHolder;
 import lombok.extern.slf4j.Slf4j;
@@ -34,10 +34,10 @@ public class ExtErrorController implements ErrorController {
         if (statusCode < 500) {
             var errorMsg = MessageFormat.format("{0} ({1}) -> {2} ",
                     messageHolder.lGet("exception.access.invalid"), statusCode, errorAttributes.get("message"));
-            return new Result(ResultEnum.E_REQ_ARG.getCode(), errorMsg);
+            return new Result(BizReponse.E_REQ_ARG, errorMsg, messageHolder);
         } else {
             //系统内部错误不展示具体报错内容
-            return new Result(ResultEnum.E_UNKNOW.getCode(), ResultEnum.E_UNKNOW.getLocalValue(messageHolder));
+            return new Result(BizReponse.E_UNKNOW, messageHolder);
         }
     }
 
@@ -47,7 +47,7 @@ public class ExtErrorController implements ErrorController {
      */
     @RequestMapping("/shiro/unauthorized")
     public Result deny(){
-        return new Result(ResultEnum.E_REQ_UNAUTH.getCode(), messageHolder.lGet("eurm.result.error-unauth"));
+        return new Result(BizReponse.E_REQ_UNAUTH, messageHolder);
     }
 
     /**
@@ -56,7 +56,7 @@ public class ExtErrorController implements ErrorController {
      */
     @RequestMapping("/shiro/authc")
     public Result authc() {
-        return new Result(ResultEnum.E_REQ_UNAUTH.getCode(), messageHolder.lGet("eurm.result.error-need-signin"));
+        return new Result(BizReponse.E_REQ_UNAUTH, messageHolder);
     }
 
     /**

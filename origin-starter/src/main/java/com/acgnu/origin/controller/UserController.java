@@ -1,7 +1,7 @@
 package com.acgnu.origin.controller;
 
 import com.acgnu.origin.entity.User;
-import com.acgnu.origin.enums.ResultEnum;
+import com.acgnu.origin.enums.BizReponse;
 import com.acgnu.origin.pojo.Result;
 import com.acgnu.origin.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -57,9 +57,9 @@ public class UserController extends BaseController {
             subject.login(usernamePasswordToken);
             return success(subject.getPrincipal());
         } catch (UnknownAccountException | LockedAccountException e) {
-            return new Result(ResultEnum.E_REQ_ARG.getCode(), e.getMessage());
+            return new Result(BizReponse.E_REQ_ARG, e.getMessage(), messageHolder);
         } catch (AuthenticationException e) {
-            return new Result(ResultEnum.E_REQ_ARG.getCode(), messageHolder.lGet("user.login.account-error"));
+            return new Result(BizReponse.E_REQ_ARG, messageHolder);
         }
     }
 

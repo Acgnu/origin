@@ -1,6 +1,6 @@
 package com.acgnu.origin.config;
 
-import com.acgnu.origin.enums.ResultEnum;
+import com.acgnu.origin.enums.BizReponse;
 import com.acgnu.origin.pojo.Result;
 import com.acgnu.origin.util.MessageHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +51,6 @@ public class ControllerResultHandler implements ResponseBodyAdvice {
             return body;
         }
         //不是的话则包装后返回, 通常失败了则会由异常拦截器处理, 所以这里返回值默认success即可
-        return new Result(ResultEnum.SUCCESS.getCode(), ResultEnum.SUCCESS.getLocalValue(messageHolder), body);
+        return new Result(BizReponse.SUCCESS, body, messageHolder);
     }
 }

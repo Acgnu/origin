@@ -1,6 +1,8 @@
 package com.acgnu.origin.controller;
 
 import com.acgnu.origin.entity.AccessUvLog;
+import com.acgnu.origin.entity.User;
+import com.acgnu.origin.enums.BizReponse;
 import com.acgnu.origin.pojo.Result;
 import com.acgnu.origin.redis.RedisHelper;
 import com.acgnu.origin.redis.RedisKeyConst;
@@ -11,6 +13,8 @@ import org.springframework.amqp.rabbit.core.RabbitMessagingTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Slf4j
@@ -39,10 +43,11 @@ public class BetaController extends BaseController {
      * 最基本的返回json数据
      * @return
      */
-    @GetMapping("/demo")    //使用GetMapping可以省略method
-    public Result demoData() {
-        var user = userService.findById(1);
-        return new Result<>(user, messageHolder);
+    @RequestMapping("/demo")    //使用GetMapping可以省略method
+    public Result demoData(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println(request);
+//        var user = userService.findById(1);
+        return new Result<>(BizReponse.SUCCESS, new User(), messageHolder);
     }
 
     /**

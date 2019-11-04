@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Optional;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 @Slf4j
@@ -89,7 +90,7 @@ public class RequestUtil {
     /**
      * HTTP协议POST请求添加参数的封装方法
      */
-    public static String concatQueryString(TreeMap<String, String> paramsMap) {
+    public static String concatQueryString(SortedMap<String, String> paramsMap) {
         if (null == paramsMap || paramsMap.isEmpty()) {
             return "";
         }
